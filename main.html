@@ -8,15 +8,26 @@
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/static/css/jquery.flowchart.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src='/static/js/jquery.flowchart.min.js'></script>
         <style>
         .BoxDD .flowchart-operator-title {background-color: orange;}
-        .BoxSource .flowchart-operator-title {background-color: green;}
+        .BoxSource .flowchart-operator-title {background-color: lightgreen;}
         .BoxDE .flowchart-operator-title {background-color: lightblue;}
         </style>
     </head>
     <body>
-    <div id='example_multiple' class="flowchart-example-container"></div>
+        <div class='row'>
+            <div class='col-md-4'>
+                <label id='codepenlabel' style='width:20%'></label><textarea style='float: right;  width: 80%'  id='codepen'></textarea>
+            </div>
+        </div>
+        <hr>
+        <div class='row'>
+            <div class='col-md-8'>
+                <div id='example_multiple' class="flowchart-example-container"></div>
+            </div>
+        </div>
         <div>
             <p>The letters in brackets indicate the keys you can press to perform the functions. You can also click the buttons themselves.</p>
             <button id='addDD'>Add [D]ata to Data Box</button>
@@ -78,30 +89,57 @@
     var data = { operators: {}, links: {}};
 	var $flowchart=$("#example_multiple");
     var $container =$flowchart.parent();
+    $("#codepen").change(function (){
+          var opid = $flowchart.flowchart('getSelectedOperatorId');
+          console.log(opid);
+          var data = $flowchart.flowchart('getOperatorData', opid);
+          data['program'] = $("#codepen").val();
+          $flowchart.flowchart('setOperatorData', opid, data);
+          console.log(data['program']);
+    });
 
     $flowchart.flowchart({
-      data: data
+      data: data,
+      linkWidth:5,
+      multipleLinksOnOutput: true,
+      grid:10,
+      onOperatorSelect: function (operatorID){
+          $("#codepenlabel").text(operatorID);
+          var data = $flowchart.flowchart('getOperatorData', operatorID);
+          console.log(data['program']);
+          if (data['program']) {
+              $("#codepen").val(data['program']);
+            } else {
+              $("#codepen").val("");
+            }
+          return true;
+      },
+
     });
     $(document).keypress(function(e) {
-        switch (e.which) {
-            case 120: 
-            case 127:
-                 $flowchart.flowchart('deleteSelected'); break;
-            case 115:
-                 $("#addSource").click(); break;
-            case 100:
-                 $("#addDD").click(); break;
-            case 101:
-                 $("#addDE").click(); break;
-            case 109:
-                 $("#MAKESCRIPT").click(); break;
-            default:
-                 console.log(e.which);
-        };
+        if ($("#codepen").is(":focus")) {console.log("I do not know how to do NOT");}
+        else{
+            switch (e.which) {
+                case 120: 
+                case 127:
+                     $flowchart.flowchart('deleteSelected'); break;
+                case 115:
+                     $("#addSource").click(); break;
+                case 100:
+                     $("#addDD").click(); break;
+                case 101:
+                     $("#addDE").click(); break;
+                case 109:
+                     $("#MAKESCRIPT").click(); break;
+                default:
+                     console.log(e.which);
+            };
+        }
     });
 
      $("#MAKESCRIPT").click(function (){
          var data = $flowchart.flowchart('getData');
+         data['scriptname'] = prompt("Enter the script name: ", defaultText="script");
          console.log(data);
          $.ajax({
              'type': 'POST',
@@ -113,5 +151,6 @@
      });
 	  });  // document ready
 </script>
-    </body>
+<hr>
+<a href='/scripts/'>View scripts</a>
 </html>
