@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <title>DataFlow</title>
+		<meta charset='utf-8'>
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href='/static/css/custom.css' rel='stylesheet' type='text/css'>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/jquery.flowchart.min.css">
+        <script src='/static/js/jquery.flowchart.min.js'></script>
+        <style>
+        .BoxDD .flowchart-operator-title {background-color: orange;}
+        .BoxSource .flowchart-operator-title {background-color: green;}
+        .BoxDE .flowchart-operator-title {background-color: lightblue;}
+        </style>
+    </head>
+    <body>
+    <div id='example_multiple' class="flowchart-example-container"></div>
+        <div>
+            <p>The letters in brackets indicate the keys you can press to perform the functions. You can also click the buttons themselves.</p>
+            <button id='addDD'>Add [D]ata to Data Box</button>
+            <button id='addSource' class='create_operator'>Add [S]ource Box</button>
+            <button id='addDE' class='create_operator'>Add Data and [E]stimator Box</button>
+            <button id='MAKESCRIPT' >[M]ake Py Script!</button>
+
+        </div>
+
+    <script>
+ $(document).ready(function() {
+     var boxcount=0;
+     $("#addDD").click(function (){
+		  var operatorId = 'Data_Data'+ boxcount;
+		  var operatorData = {
+			top: 0, left: 0,
+			properties: {
+			  title: operatorId,
+              inputs: {input_1: {label: 'inp1'}, input_2:{label: 'inp2'}, input_3:{label: 'inp3'}},
+              outputs: {output_1: {label: 'out1'}, output_2:{label: 'out2'}, output_3:{label: 'out3'}},
+              multiple: true,
+              class: 'BoxDD'
+			}
+		  };
+          boxcount += 1;
+		  $flowchart.flowchart('createOperator', operatorId, operatorData);
+     });
+     $("#addSource").click(function (){
+		  var operatorId = 'Source'+ boxcount;
+          var name = prompt("Please name this source:", defaultText=operatorId);
+		  var operatorData = {
+			top: 0, left: 0,
+			properties: {
+			  title: name,
+              inputs: {},
+              outputs: {output_1: {label: 'out1'}, output_2:{label: 'out2'}, output_3:{label: 'out3'}},
+              class: 'BoxSource',
+			}
+		  };
+          boxcount += 1;
+		  $flowchart.flowchart('createOperator', operatorId, operatorData);
+     });
+     $("#addDE").click(function (){
+		  var operatorId = 'Data-Estimator' + boxcount;
+		  var operatorData = {
+			top: 0, left: 0,
+			properties: {
+			  title: operatorId,
+              inputs: {input_1: {label: 'est1'}, input_2:{label: 'data1'}, input_3:{label: 'est2'}, input_4: {label: 'data2'}},
+              outputs: {output_1: {label: 'est1_out'}, output_2:{label: 'data1_out'}, output_3:{label: 'est2_out'}, output_4: {label: 'data2_out'}},
+              class: 'BoxDE',
+			}
+		  };
+          boxcount += 1;
+		  $flowchart.flowchart('createOperator', operatorId, operatorData);
+     });
+
+
+    var data = { operators: {}, links: {}};
+	var $flowchart=$("#example_multiple");
+    var $container =$flowchart.parent();
+
+    $flowchart.flowchart({
+      data: data
+    });
+    $(document).keypress(function(e) {
+        switch (e.which) {
+            case 120: 
+            case 127:
+                 $flowchart.flowchart('deleteSelected'); break;
+            case 115:
+                 $("#addSource").click(); break;
+            case 100:
+                 $("#addDD").click(); break;
+            case 101:
+                 $("#addDE").click(); break;
+            case 109:
+                 $("#MAKESCRIPT").click(); break;
+            default:
+                 console.log(e.which);
+        };
+    });
+
+     $("#MAKESCRIPT").click(function (){
+         var data = $flowchart.flowchart('getData');
+         console.log(data);
+         $.ajax({
+             'type': 'POST',
+             'url': '/makescript',
+             'contentType': 'application/json',
+             'data': JSON.stringify(data),
+             'dataType': 'json',
+             'success': console.log});
+     });
+	  });  // document ready
+</script>
+    </body>
+</html>
