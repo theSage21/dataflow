@@ -9,9 +9,9 @@ sink_box_class = 'BoxSink'
 code_imports = '''
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc
+from sklearn.metrics import roc_auc_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_val_score, cross_val_predict, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split
 
 #########################################################
 '''
@@ -23,7 +23,7 @@ program_table = dict(addreadcsv=['Read csv', source_box_class,
         addscore=['Add Score', de_box_class,
         '''X, Y = data.drop("target", axis=1), data.target
 'p = est.predict(X)
-'score = accuracy(Y, p)'''],
+'score = roc_auc_score(Y, p)'''],
         addtrainclassifier=['Train Classifier', de_box_class,
         '''X, Y = data.drop("target", axis=1), data.target
 est.fit(X, Y)'''],

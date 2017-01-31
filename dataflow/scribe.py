@@ -93,7 +93,6 @@ def name_variables(traversal, data):
         if (frm, frm_con) not in unique_nodes_from:
             unique_nodes_from[frm, frm_con] = var_name_count
             var_name_count += 1
-        print(frm, frm_con, var_name_count)
         varname = 'var' + str(unique_nodes_from[frm, frm_con])
         variable_map[frm, frm_con] = varname
         variable_map[to, to_con] = varname

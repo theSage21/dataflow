@@ -26,15 +26,15 @@ Once the command is issued to make a file, it is generated in `static/scripts/`
 
 ```python
 # Generated on
-# 2017-01-31 15:32:03.402538
+# 2017-01-31 16:58:56.740630
 # via DataFlow: https://github.com/theSage21/dataflow
 
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc
+from sklearn.metrics import roc_auc_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_val_score, cross_val_predict, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split
 
 #########################################################
 
@@ -73,7 +73,7 @@ def Print5(inp=None):
 def Score1(est=None, data=None):
     X, Y = data.drop("target", axis=1), data.target
     p = est.predict_proba(X)[:, 0]
-    score = roc_auc(Y, p)
+    score = roc_auc_score(Y, p)
     
     return score
     
