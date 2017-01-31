@@ -26,7 +26,7 @@ Once the command is issued to make a file, it is generated in `static/scripts/`
 
 ```python
 # Generated on
-# 2017-01-31 15:29:11.945333
+# 2017-01-31 15:32:03.402538
 # via DataFlow: https://github.com/theSage21/dataflow
 
 
@@ -86,22 +86,22 @@ def Score1(est=None, data=None):
 
 # Step --------------------------<[1]>-
 
-output_1 = RandomForestClassifier3()
-output_1 = ReadCsv2()
+var2 = RandomForestClassifier3()
+var0 = ReadCsv2()
 
 # Step --------------------------<[2]>-
 
-output_1, output_2 = TrTsSplit4(input_1)
+var1, var4 = TrTsSplit4(var0)
 
 # Step --------------------------<[3]>-
 
-output_1 = TrainClassifier0(input_1, input_2)
+var3 = TrainClassifier0(var2, var1)
 
 # Step --------------------------<[4]>-
 
-output_1 = Score1(input_1, input_2)
+var5 = Score1(var3, var4)
 
 # Step --------------------------<[5]>-
 
-Print5(input_1)
+Print5(var5)
 ```

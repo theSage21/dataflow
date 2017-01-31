@@ -99,8 +99,8 @@ def generate_calls_from_traversal(traversal, data):
         for opname, op in step.items():
             inps = op['properties']['inputs']
             outs = op['properties']['outputs']
-            args = ', '.join([variable_map.get(opname, key) for key in inps.keys()])
-            outs = ', '.join([variable_map.get(opname, key) for key in outs.keys()])
+            args = ', '.join([variable_map.get((opname, key)) for key in inps.keys()])
+            outs = ', '.join([variable_map.get((opname, key)) for key in outs.keys()])
             if outs:
                 this_call = '{outs} = {name}({args})'.format(outs=outs,
                         name=opname, args=args)
