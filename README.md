@@ -1,10 +1,32 @@
 DataFlow
 ========
 
-Tries to expose as much of the sk-learn api as possible via a dataflow diagram.
+I used to love working on [Blender's](https://www.blender.org) node editor in
+my college days. That love was invoked again once I encountered Microsoft's
+MLStudio. I liked it for the simple fact that I did not have to type a lot.
+That is where dataflow originates from.
+
+Dataflow provides nodes/boxes/operators which represent processing units. These
+are connected via links/data paths/lines to show dependency. There are four
+main kinds of boxes (Source, Sink, DataData, DataEstimator). These are named so
+because Dataflow tries to expose as much of the sk-learn api as possible via a
+dataflow diagram.
+
+In the future dataflow may not remain limited to Python.
 
 
-Documentation
+Get Started
+-----------
+
+Here's a session from start to finish.
+
+```bash
+virtualenv -p python3 env
+source env/bin/activate
+pip install git+https://github.com/theSage21/dataflow.git@master
+
+
+Trivia
 -------------
 
 - There are three main types of blocks

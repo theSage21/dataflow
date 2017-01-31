@@ -12,4 +12,5 @@ setup(name='dataflow',
         entry_points = {
             'console_scripts': ['dataflow=dataflow.cli:main'],
             },
+        install_requires=['bottle'],
         zip_safe=False)
