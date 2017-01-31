@@ -68,55 +68,76 @@ Once the command is issued to make a file, it is generated in `static/scripts/`
 
 ```python
 # Generated on
-# 2017-01-31 16:58:56.740630
+# 2017-01-31 17:31:48.506545
 # via DataFlow: https://github.com/theSage21/dataflow
 
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, accuracy_score, f1_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, train_test_split
 
 #########################################################
 
 
-def TrainClassifier0(est=None, data=None):
-    X, Y = data.drop("target", axis=1), data.target
-    est.fit(X, Y)
-    
-    return est
-    
-
-def ReadCsv2():
+def ReadCsv0():
     data = pd.read_csv("data.csv")
     return data
     
 
-def RandomForestClassifier3():
+def RandomForestClassifier1():
     est = RandomForestClassifier(n_jobs=-1)
     return est
     
 
-def TrTsSplit4(data=None):
+def TrTsSplit2(data=None):
     X, Y = data.drop("target", axis=1), data.target
     x_tr, x_ts, y_tr, y_ts = train_test_split(X, Y, 0.25)
     train = x_tr["target"] = y_tr
     test = x_ts["target"] = y_ts
-    
     return train, test
     
 
-def Print5(inp=None):
+def TrainClassifier3(est=None, data=None):
+    X, Y = data.drop("target", axis=1), data.target
+    est.fit(X, Y)
+    return est
+    
+
+def Score4(est=None, data=None):
+    X, Y = data.drop("target", axis=1), data.target
+    p = est.predict(X)
+    score = roc_auc_score(Y, p)
+    return score
+    
+
+def Print7(inp=None):
     print(inp)
     return 
     
 
-def Score1(est=None, data=None):
-    X, Y = data.drop("target", axis=1), data.target
-    p = est.predict_proba(X)[:, 0]
-    score = roc_auc_score(Y, p)
+def Print8(inp=None):
+    print(inp)
+    return 
     
+
+def Print9(inp=None):
+    print(inp)
+    return 
+    
+
+def Score5(est=None, data=None):
+    X, Y = data.drop("target", axis=1), data.target
+    p = est.predict(X)
+    score = accuracy_score(Y, p)
+    return score
+    
+
+def Score6(est=None, data=None):
+    X, Y = data.drop("target", axis=1), data.target
+    p = est.predict(X)
+    score = f1_score(Y, p)
     return score
     
 
@@ -128,22 +149,26 @@ def Score1(est=None, data=None):
 
 # Step --------------------------<[1]>-
 
-var2 = RandomForestClassifier3()
-var0 = ReadCsv2()
+var1 = RandomForestClassifier1()
+var0 = ReadCsv0()
 
 # Step --------------------------<[2]>-
 
-var1, var4 = TrTsSplit4(var0)
+var2, var3 = TrTsSplit2(var0)
 
 # Step --------------------------<[3]>-
 
-var3 = TrainClassifier0(var2, var1)
+var4 = TrainClassifier3(var1, var2)
 
 # Step --------------------------<[4]>-
 
-var5 = Score1(var3, var4)
+var7 = Score6(var4, var3)
+var6 = Score5(var4, var3)
+var5 = Score4(var4, var3)
 
 # Step --------------------------<[5]>-
 
-Print5(var5)
+Print9(var5)
+Print8(var6)
+Print7(var7)
 ```
