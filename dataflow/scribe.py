@@ -82,17 +82,26 @@ def order_link_traversal(data):
             ops = {}
     return traversal
 
-def generate_calls_from_traversal(traversal, data):
-    "Return a string which has perfectly chained calls as per the traversal"
-    calls, variable_map = [], dict()
+def name_variables(traversal, data):
+    variable_map = dict()
     # Generate a variable map
+    unique_nodes_from = dict()
     var_name_count = 0
     for link in data['links'].values():
         frm, to = link['fromOperator'], link['toOperator']
         frm_con, to_con = link['fromConnector'], link['toConnector']
-        variable_map[frm, frm_con] = 'var' + str(var_name_count)
-        variable_map[to, to_con] = 'var' + str(var_name_count)
-        var_name_count += 1
+        if (frm, frm_con) not in unique_nodes_from:
+            unique_nodes_from[frm, frm_con] = var_name_count
+            var_name_count += 1
+        print(frm, frm_con, var_name_count)
+        varname = 'var' + str(unique_nodes_from[frm, frm_con])
+        variable_map[frm, frm_con] = varname
+        variable_map[to, to_con] = varname
+    return variable_map
+
+def generate_calls_from_traversal(traversal, data):
+    "Return a string which has perfectly chained calls as per the traversal"
+    calls, variable_map = [], name_variables(traversal, data)
     # rename the variables and generate calls
     total_steps = len(traversal)
     for stepindex, step in enumerate(reversed(traversal)):
@@ -107,8 +116,6 @@ def generate_calls_from_traversal(traversal, data):
             else:
                 this_call = '{name}({args})'.format(outs=outs,
                         name=opname, args=args)
-
-
             calls.append(this_call)
         calls.append('')
         calls.append('# Step --------------------------<[{}]>-'.format(total_steps - stepindex))
