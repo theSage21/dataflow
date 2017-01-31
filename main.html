@@ -14,6 +14,7 @@
         .BoxDD .flowchart-operator-title {background-color: orange;}
         .BoxSource .flowchart-operator-title {background-color: lightgreen;}
         .BoxDE .flowchart-operator-title {background-color: lightblue;}
+        .BoxSink .flowchart-operator-title {background-color: darkgrey;}
         #codepen {width: 100%; }
         </style>
     </head>
@@ -30,11 +31,10 @@
             </div>
         </nav>
         <div class='container text-center'>
-            <hr>
             <div class='row'>
-                <table class='col-md-12'>
+                <table class='col-md-12 table table-bordered'>
                     <tbody>
-                        <tr><td class='col-md-2'>Code For: </td><td class='col-md-10'><textarea  id='codepen'></textarea></td></tr>
+                        <tr><td class='col-md-1'>For: </td><td id='codepenlabel' class='col-md-1'></td><td class='col-md-10'><textarea  id='codepen'></textarea></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -42,9 +42,12 @@
             <div class='row text-left'>
                 <div class='col-md-2 column'>
                     <ul class="nav nav-pills nav-stacked">
-                        <li><button class='btn btn-success'><span class="glyphicon glyphicon-chevron-right"></span>read_csv</button></li>
-                        <li><button class='btn btn-success'><span class="glyphicon glyphicon-chevron-right"></span>RandomForestClassifier</button></li>
-                        <li><button class='btn btn-info'><span class="glyphicon glyphicon-chevron-right"></span>CrossValidate</button></li>
+                        <li><button id='addreadcsv' class='btn btn-success'><span class="glyphicon glyphicon-chevron-right"></span>read_csv</button></li>
+                        <li><button id='addrfclassifier' class='btn btn-success'><span class="glyphicon glyphicon-chevron-right"></span>RandomForestClassifier</button></li>
+                        <li><button id='addscore' class='btn btn-info'><span class="glyphicon glyphicon-chevron-right"></span>Score Estimator on Data</button></li>
+                        <li><button id='addtrainclassifier' class='btn btn-info'><span class="glyphicon glyphicon-chevron-right"></span>Train Classifier</button></li>
+                        <li><button id='addprint' class='btn'><span class="glyphicon glyphicon-chevron-right"></span>Print</button></li>
+                        <li><button id='addtraintestsplit' class='btn btn-warning'><span class="glyphicon glyphicon-chevron-right"></span>Train Test Split</button></li>
                     </ul>
                 </div>
 
@@ -60,123 +63,7 @@
                 <button id='MAKESCRIPT' class='btn'>[M]ake Py Script!</button>
 
             </div>
-
-        <script>
-     $(document).ready(function() {
-         var boxcount=0;
-         $("#addDD").click(function (){
-              var operatorId = 'Data_Data'+ boxcount;
-              var operatorData = {
-                top: 0, left: 0,
-                properties: {
-                  title: operatorId,
-                  inputs: {input_1: {label: 'inp1'}, input_2:{label: 'inp2'}, input_3:{label: 'inp3'}},
-                  outputs: {output_1: {label: 'out1'}, output_2:{label: 'out2'}, output_3:{label: 'out3'}},
-                  multiple: true,
-                  class: 'BoxDD'
-                }
-              };
-              boxcount += 1;
-              $flowchart.flowchart('createOperator', operatorId, operatorData);
-         });
-         $("#addSource").click(function (){
-              var operatorId = 'Source'+ boxcount;
-              var name = prompt("Please name this source:", defaultText=operatorId);
-              var operatorData = {
-                top: 0, left: 0,
-                properties: {
-                  title: name,
-                  inputs: {},
-                  outputs: {output_1: {label: 'out1'}, output_2:{label: 'out2'}, output_3:{label: 'out3'}},
-                  class: 'BoxSource',
-                }
-              };
-              boxcount += 1;
-              $flowchart.flowchart('createOperator', operatorId, operatorData);
-         });
-         $("#addDE").click(function (){
-              var operatorId = 'Data-Estimator' + boxcount;
-              var operatorData = {
-                top: 0, left: 0,
-                properties: {
-                  title: operatorId,
-                  inputs: {input_1: {label: 'est1'}, input_2:{label: 'data1'}},
-                  outputs: {output_1: {label: 'est1_out'}, output_2:{label: 'data1_out'}},
-                  class: 'BoxDE',
-                }
-              };
-              boxcount += 1;
-              $flowchart.flowchart('createOperator', operatorId, operatorData);
-         });
-
-
-        var data = { operators: {}, links: {}};
-        var $flowchart=$("#example_multiple");
-        var $container =$flowchart.parent();
-        $("#codepen").change(function (){
-              var opid = $flowchart.flowchart('getSelectedOperatorId');
-              console.log(opid);
-              var data = $flowchart.flowchart('getOperatorData', opid);
-              data['program'] = $("#codepen").val();
-              $flowchart.flowchart('setOperatorData', opid, data);
-              console.log(data['program']);
-        });
-
-        $flowchart.flowchart({
-          data: data,
-          linkWidth:5,
-          multipleLinksOnOutput: true,
-          grid:10,
-          onOperatorSelect: function (operatorID){
-              $("#codepenlabel").text(operatorID);
-              var data = $flowchart.flowchart('getOperatorData', operatorID);
-              console.log(data['program']);
-              if (data['program']) {
-                  $("#codepen").val(data['program']);
-                } else {
-                  $("#codepen").val("");
-                }
-              return true;
-          },
-
-        });
-        $(document).keypress(function(e) {
-            if ($("#codepen").is(":focus")) {console.log("I do not know how to do NOT");}
-            else{
-                switch (e.which) {
-                    case 120: 
-                    case 127:
-                         $flowchart.flowchart('deleteSelected'); break;
-                    case 115:
-                         $("#addSource").click(); break;
-                    case 100:
-                         $("#addDD").click(); break;
-                    case 101:
-                         $("#addDE").click(); break;
-                    case 109:
-                         $("#MAKESCRIPT").click(); break;
-                    default:
-                         console.log(e.which);
-                };
-            }
-        });
-
-         $("#MAKESCRIPT").click(function (){
-             var data = $flowchart.flowchart('getData');
-             data['scriptname'] = prompt("Enter the script name: ", defaultText="script");
-             console.log(data);
-             $.ajax({
-                 'type': 'POST',
-                 'url': '/makescript',
-                 'contentType': 'application/json',
-                 'data': JSON.stringify(data),
-                 'dataType': 'json',
-                 'success': console.log});
-         });
-          });  // document ready
-    </script>
-    <hr>
-    <a href='/scripts/'>View scripts</a>
+        <script src='/static/js/main.js'></script>
     </div>
     </body>
 </html>
