@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 from bottle import static_file, request, Bottle
 from dataflow import config, scribe
 
@@ -30,18 +31,31 @@ def main_page(name=None):
 
 @app.get('/scripts/')
 def scriptlist():
-    string = '<tr><td><a href=/static/scripts/{name}>{name}</td><td><a href=/loadscript/{name}>{name}</td></tr>'
+    string = '<tr><td><a href=/static/scripts/{name}>{name}</td>'
+    string +='<td><a href=/loadscript/{name}>{name}</a></td>'
+    string +='<td><a href=/makepy/{name}>{name}</a></td></tr>'
     scripts = [string.format(name=i) for i in os.listdir('static/scripts')]
     scripts = '\n'.join(scripts)
     html = readhtml('scripts.html')
     html = html.replace('<Areafortablerows>', scripts)
     return html
 
-@app.post('/makescript')
-def makescript():
+@app.post('/savejson')
+def savescript():
     name = request.json['scriptname']
     savejson(name, request.json)
     return ''
+
+@app.get('/makepy/<name>')
+def makepy(name):
+    stamp = '# Generated on\n'
+    stamp += '# ' + str(datetime.datetime.now()) + '\n'
+    stamp += '# via DataFlow: https://github.com/theSage21/dataflow\n\n'
+
+    data = scribe.read_data(name)
+    code = stamp + scribe.convert_json_to_py(data)
+    html = '<html><body><pre>' + code + '</pre></body></html>'
+    return html
 
 #########################################################################
 # STATIC ROUTES

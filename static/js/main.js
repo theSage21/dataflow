@@ -111,7 +111,7 @@ $(document).ready(function() {
          console.log(data);
          $.ajax({
              'type': 'POST',
-             'url': '/makescript',
+             'url': '/savejson',
              'contentType': 'application/json',
              'data': JSON.stringify(data),
              'dataType': 'json',

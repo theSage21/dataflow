@@ -113,8 +113,7 @@ def generate_calls_from_traversal(traversal, data):
     calls = '\n'.join(reversed(calls))
     return calls
 
-def convert_json_to_py(name):
-    data = read_data(name)
+def convert_json_to_py(data):
     script = str(config.code_imports)  # Defensive copy
     for key, op in data['operators'].items():
         script += '\n## ' + key
