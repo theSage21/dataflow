@@ -12,13 +12,31 @@ main kinds of boxes (Source, Sink, DataData, DataEstimator). These are named so
 because Dataflow tries to expose as much of the sk-learn api as possible via a
 dataflow diagram.
 
-In the future dataflow may not remain limited to Python.
+
+Todo, ideas, and notes
+-------
+
+- [x] Support flow drawing
+- [x] Generate py code
+- [ ] Run code on server?
+- [ ] Run independent code on clusters?
+- [ ] Support more languages?
+- [ ] Need better interface design. I need to learn more about 'the website'.
+- [ ] Apologize to [sdrdis](https://github.com/sdrdis/jquery.flowchart) for cannibalizing the repo. Find a way to use it as a proper submodule.
+
+Stability and Plans
+---------
+
+- This is a very early sketch of what came to mind. Things will change.
+- In the future dataflow may not remain limited to Python and me take the path of Jupyter. (Oh how I wish!)
+- If you have a suggestion I'd love to hear. Open up an issue in the repo!
+- If you have a PR, even better.
 
 
 Get Started
 -----------
 
-Here's a session from start to finish.
+Here's a typical `bash` session from start to finish.
 
 ```bash
 virtualenv -p python3 env
@@ -30,7 +48,7 @@ dataflow
 ```
 
 
-This should start a bottle server at `0.0.0.0:8080`. When you navigate to that address via the browser, you see a simple page.
+This should start a bottle web server at `0.0.0.0:8080`. When you navigate to that address via the browser, you see a simple page.
 
 1. There is a textbox at the top. This shows code associated with blocks/boxes. It is editable.
 2. There is a workspace right in the middle of the screen. This is where all the diagrams go.
@@ -40,6 +58,7 @@ This should start a bottle server at `0.0.0.0:8080`. When you navigate to that a
 6. It will ask you for a name to give to your diagram.
 7. You can now navigate to the `/scripts` url and see all the scripts.
 
+**You can delete parts of the diagram by selecting and pressing 'x' / 'del'**
 
 In case you don't like what is on offer, you can add a custom button using the
 buttons given at the bottom. The letters included inside `[ ]` act as hotkeys
