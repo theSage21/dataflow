@@ -1,7 +1,7 @@
 import os
 import json
 from bottle import static_file, request, Bottle
-from dataflow import config
+from dataflow import config, scribe
 
 
 def readhtml(file):
@@ -18,16 +18,20 @@ def savejson(file, data):
 #########################################################################
 app = Bottle()
 
+@app.get('/loadscript/<name>')
 @app.get('/')
-def main_page():
-    scripts = ''
+def main_page(name=None):
     html = readhtml('main.html')
-    html = html.replace('{generatedscripts}', scripts)
+    if name is not None:
+        data = scribe.read_data(name)
+        data = 'var existingdata = ' + json.dumps(data) + ';'
+        html = html.replace('//placeholderfordata', data)
     return html
 
 @app.get('/scripts/')
-def scritlist():
-    scripts = ['<tr><td><a href=/static/scripts/{}>{}</td></tr>'.format(i, i) for i in os.listdir('static/scripts')]
+def scriptlist():
+    string = '<tr><td><a href=/static/scripts/{name}>{name}</td><td><a href=/loadscript/{name}>{name}</td></tr>'
+    scripts = [string.format(name=i) for i in os.listdir('static/scripts')]
     scripts = '\n'.join(scripts)
     html = readhtml('scripts.html')
     html = html.replace('<Areafortablerows>', scripts)
@@ -38,7 +42,6 @@ def makescript():
     name = request.json['scriptname']
     savejson(name, request.json)
     return ''
-
 
 #########################################################################
 # STATIC ROUTES

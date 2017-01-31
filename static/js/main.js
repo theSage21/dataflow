@@ -47,7 +47,11 @@ $(document).ready(function() {
           $flowchart.flowchart('createOperator', operatorId, operatorData);
      });
     // ##############################################################################
-    var data = { operators: {}, links: {}};
+    if (typeof existingdata != "undefined"){
+        var data = existingdata;
+    }else{
+        var data = {operators: {}, links: {}};
+    }
     var $flowchart=$("#example_multiple");
     var $container =$flowchart.parent();
     // ##############################################################################
