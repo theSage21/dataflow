@@ -17,6 +17,7 @@ def savejson(file, data):
 # INTERFACE
 #########################################################################
 app = Bottle()
+
 @app.get('/')
 def main_page():
     scripts = ''
