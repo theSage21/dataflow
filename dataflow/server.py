@@ -26,6 +26,8 @@ def main_page(name=None):
         data = scribe.read_data(name)
         data = 'var existingdata = ' + json.dumps(data) + ';'
         html = html.replace('//placeholderfordata', data)
+    programtable = 'var programtable = ' + json.dumps(config.program_table) + ';'
+    html = html.replace('//programtableplaceholder', programtable)
     return html
 
 @app.get('/scripts/')

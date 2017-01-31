@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    Object.keys(programtable).forEach(function (key, index) {
+        var button = "<li><button id='" + key + "' class='btn '>" + programtable[key][0] + "</button></li>";
+        $("#operator_menu").append(button);
+    });
+    // ##############################################################################
      var boxcount=0;
      $("#addDD").click(function (){
           var operatorId = 'Data_Data'+ boxcount;
@@ -57,11 +62,9 @@ $(document).ready(function() {
     // ##############################################################################
     $("#codepen").change(function (){
           var opid = $flowchart.flowchart('getSelectedOperatorId');
-          console.log(opid);
           var data = $flowchart.flowchart('getOperatorData', opid);
           data['program'] = $("#codepen").val();
           $flowchart.flowchart('setOperatorData', opid, data);
-          console.log(data['program']);
     });
     // ##############################################################################
 
@@ -73,7 +76,6 @@ $(document).ready(function() {
       onOperatorSelect: function (operatorID){
           $("#codepenlabel").text(operatorID);
           var data = $flowchart.flowchart('getOperatorData', operatorID);
-          console.log(data['program']);
           if (data['program']) {
               $("#codepen").val(data['program']);
             } else {
@@ -99,8 +101,6 @@ $(document).ready(function() {
                      $("#addDE").click(); break;
                 case 109:
                      $("#MAKESCRIPT").click(); break;
-                default:
-                     console.log(e.which);
             };
         }
     });
@@ -108,7 +108,6 @@ $(document).ready(function() {
      $("#MAKESCRIPT").click(function (){
          var data = $flowchart.flowchart('getData');
          data['scriptname'] = prompt("Enter the script name: ", defaultText="script");
-         console.log(data);
          $.ajax({
              'type': 'POST',
              'url': '/savejson',
@@ -133,7 +132,7 @@ $(document).ready(function() {
           boxcount += 1;
           $flowchart.flowchart('createOperator', operatorId, operatorData);
           var data = $flowchart.flowchart('getOperatorData', operatorId);
-          data['program'] = 'data = pd.read_csv("data.csv")';
+          data['program'] = programtable['addreadcsv'][2];
           $flowchart.flowchart('setOperatorData', operatorId, data);
     });
     // ##############################################################################
@@ -152,7 +151,7 @@ $(document).ready(function() {
           boxcount += 1;
           $flowchart.flowchart('createOperator', operatorId, operatorData);
           var data = $flowchart.flowchart('getOperatorData', operatorId);
-          data['program'] = 'est = RandomForestClassifier(n_jobs=-1)';
+          data['program'] = programtable['addrfclassifier'][2];
           $flowchart.flowchart('setOperatorData', operatorId, data);
 
     });
@@ -172,10 +171,7 @@ $(document).ready(function() {
         boxcount += 1;
         $flowchart.flowchart('createOperator', operatorId, operatorData);
         var data = $flowchart.flowchart('getOperatorData', operatorId);
-        var prog = 'X, Y = data.drop("target", axis=1), data.target\n';
-        prog += 'p = est.predict(X)\n';
-        prog += 'score = accuracy(Y, p)\n';
-        data['program'] = prog;
+        data['program'] = programtable['addscore'][2];
         $flowchart.flowchart('setOperatorData', operatorId, data);
     });
     // ##############################################################################
@@ -194,9 +190,7 @@ $(document).ready(function() {
         boxcount += 1;
         $flowchart.flowchart('createOperator', operatorId, operatorData);
         var data = $flowchart.flowchart('getOperatorData', operatorId);
-        var prog = 'X, Y = data.drop("target", axis=1), data.target\n';
-        prog += 'est.fit(X, Y)\n';
-        data['program'] = prog;
+        data['program'] = programtable['addtrainclassifier'][2];
         $flowchart.flowchart('setOperatorData', operatorId, data);
     });
 
@@ -235,11 +229,7 @@ $(document).ready(function() {
         boxcount += 1;
         $flowchart.flowchart('createOperator', operatorId, operatorData);
         var data = $flowchart.flowchart('getOperatorData', operatorId);
-        var prog = 'X, Y = data.drop("target", axis=1), data.target\n';
-        prog += 'x_tr, x_ts, y_tr, y_ts = train_test_split(X, Y, 0.25)\n';
-        prog += 'train = x_tr["target"] = y_tr\n';
-        prog += 'test = x_ts["target"] = y_ts\n';
-        data['program'] = prog;
+        data['program'] = programtable['addtraintestsplit'][2];
         $flowchart.flowchart('setOperatorData', operatorId, data);
     });
     // ##############################################################################
