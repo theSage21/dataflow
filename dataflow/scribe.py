@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 from functools import reduce
 from copy import deepcopy
 from dataflow import config
@@ -98,8 +99,8 @@ def generate_calls_from_traversal(traversal, data):
         for opname, op in step.items():
             inps = op['properties']['inputs']
             outs = op['properties']['outputs']
-            args = ', '.join([variable_map[opname, key] for key in inps.keys()])
-            outs = ', '.join([variable_map[opname, key] for key in outs.keys()])
+            args = ', '.join([variable_map.get(opname, key) for key in inps.keys()])
+            outs = ', '.join([variable_map.get(opname, key) for key in outs.keys()])
             if outs:
                 this_call = '{outs} = {name}({args})'.format(outs=outs,
                         name=opname, args=args)
@@ -109,20 +110,24 @@ def generate_calls_from_traversal(traversal, data):
 
 
             calls.append(this_call)
-        calls.append('# Step --------------------------{}'.format(total_steps - stepindex))
+        calls.append('')
+        calls.append('# Step --------------------------<[{}]>-'.format(total_steps - stepindex))
+        calls.append('')
     calls = '\n'.join(reversed(calls))
     return calls
 
 def convert_json_to_py(data):
-    script = str(config.code_imports)  # Defensive copy
+    script = '# Generated on\n'
+    script += '# ' + str(datetime.datetime.now()) + '\n'
+    script += '# via DataFlow: https://github.com/theSage21/dataflow\n\n'
+    script += str(config.code_imports)  # Defensive copy
     for key, op in data['operators'].items():
-        script += '\n## ' + key
-        script += wrap_in_function(op)
+        script += '\n'+wrap_in_function(op)
     script += '\n'
     # Functions are defined. Now we define the calls
     traversal = order_link_traversal(data)
     calls = generate_calls_from_traversal(traversal, data)
-    script += '\n#########################\n#MAIN\n#########################\n'
+    script += '\n#########################\n#MAIN\n#########################'
     script += '\n# Parts within steps can be run in parallel\n\n'
     script += calls
     return script

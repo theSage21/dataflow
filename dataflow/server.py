@@ -1,6 +1,5 @@
 import os
 import json
-import datetime
 from bottle import static_file, request, Bottle
 from dataflow import config, scribe
 
@@ -48,12 +47,8 @@ def savescript():
 
 @app.get('/makepy/<name>')
 def makepy(name):
-    stamp = '# Generated on\n'
-    stamp += '# ' + str(datetime.datetime.now()) + '\n'
-    stamp += '# via DataFlow: https://github.com/theSage21/dataflow\n\n'
-
     data = scribe.read_data(name)
-    code = stamp + scribe.convert_json_to_py(data)
+    code = scribe.convert_json_to_py(data)
     html = '<html><body><pre>' + code + '</pre></body></html>'
     return html
 
