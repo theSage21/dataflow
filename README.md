@@ -23,7 +23,27 @@ Here's a session from start to finish.
 ```bash
 virtualenv -p python3 env
 source env/bin/activate
-pip install git+https://github.com/theSage21/dataflow.git@master
+git clone https://github.com/theSage21/dataflow dataflow
+cd dataflow
+pip install -r requirements.txt
+dataflow
+```
+
+
+This should start a bottle server at `0.0.0.0:8080`. When you navigate to that address via the browser, you see a simple page.
+
+1. There is a textbox at the top. This shows code associated with blocks/boxes. It is editable.
+2. There is a workspace right in the middle of the screen. This is where all the diagrams go.
+3. There are buttons on the left. Clicking one adds a box to the workspace. They all get added on the top left corner.
+4. You can move the boxes around. To connect inputs to outputs click on an output and then on another input.
+5. Once your diagram is done, click on the `make py` button at the bottom.
+6. It will ask you for a name to give to your diagram.
+7. You can now navigate to the `/scripts` url and see all the scripts.
+
+
+In case you don't like what is on offer, you can add a custom button using the
+buttons given at the bottom. The letters included inside `[ ]` act as hotkeys
+to add those types of boxes.
 
 
 Trivia
