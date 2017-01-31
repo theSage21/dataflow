@@ -1,6 +1,5 @@
 .flowchart-example-container {
-  height: 200px;
-  border: 1px solid #BBB;
+  border: 3px solid #BBB;
   margin-bottom: 10px;
 }
 
@@ -53,7 +52,7 @@ h4 {
 }
 
 #example_multiple {
-  width: 1000px;
+  width: 100%;
   height: 400px;
   background: #d5dce8;
 }
