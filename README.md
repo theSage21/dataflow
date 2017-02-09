@@ -1,6 +1,8 @@
 DataFlow
 ========
 
+[DEPRECATED] **You might want to take a look at [Luigi](https://github.com/spotify/luigi)**
+
 I used to love working on [Blender's](https://www.blender.org) node editor in
 my college days. That love was invoked again once I encountered Microsoft's
 MLStudio. I liked it for the simple fact that I did not have to type a lot.
